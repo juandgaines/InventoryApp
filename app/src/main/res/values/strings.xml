@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">InventoryApp</string>
+    <string name="empty_view_title_text">You haven\'t added anything yet ...</string>
+
+    <!-- Subtitle text for the empty view that prompts the user to add a pet [CHAR LIMIT=50] -->
+    <string name="empty_view_subtitle_text">Get started by adding a new product</string>
+    <string name="editor_overview">Overview</string>
+
+    <string name="hint_product_name">Name</string>
+    <string name="hint_product_qty">Qty</string>
+    <string name="category_price">Price</string>
+
+
+    <string name="currency_colombia">COP</string>
+
+    <!-- Label for dropdown menu option if the pet is male [CHAR LIMIT=20] -->
+    <string name="currency_usa"> USD </string>
 </resources>
