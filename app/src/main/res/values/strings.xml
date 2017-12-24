@@ -10,6 +10,10 @@
     <string name="hint_product_qty">Qty</string>
     <string name="category_price">Price</string>
 
+    <string name="action_insert_dummy_data">Insert Dummy Data</string>
+
+    <!-- Label for overflow menu option that deletes all pet data in the app [CHAR LIMIT=20] -->
+    <string name="action_delete_all_entries">Delete All Products</string>
 
     <string name="currency_colombia">COP</string>
 

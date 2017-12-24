@@ -1,5 +1,6 @@
 package com.mytechideas.inventoryapp.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -8,10 +9,14 @@ import android.provider.BaseColumns;
 
 public class InventoryContract {
 
+    public static final String CONTENT_AUTHORITY="com.mytechideas.inventoryapp";
+    public static final Uri BASE_CONTENT=Uri.parse("content://" +CONTENT_AUTHORITY);
+    public static final String PATH_INVENTORY="products";
     private InventoryContract(){}
 
     public static class InventoryEntry implements BaseColumns{
 
+        public static final Uri CONTENT_URI=Uri.withAppendedPath(BASE_CONTENT,PATH_INVENTORY);
         public static final String TABLE_NAME= "products";
 
         public static final String _ID=BaseColumns._ID;

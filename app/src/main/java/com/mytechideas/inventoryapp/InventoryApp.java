@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mytechideas.inventoryapp.data.InventoryContract;
 import com.mytechideas.inventoryapp.data.InventoryDbHelper;
@@ -25,7 +28,6 @@ public class InventoryApp extends AppCompatActivity {
         setContentView(R.layout.inventory_app);
         mInventoryDBHelper=new InventoryDbHelper(this);
 
-        insertPet();
 
 
         SQLiteDatabase db =mInventoryDBHelper.getReadableDatabase();
@@ -54,6 +56,35 @@ public class InventoryApp extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu options from the res/menu/menu_catalog.xml file.
+        // This adds menu items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_inventory, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // User clicked on a menu option in the app bar overflow menu
+        switch (item.getItemId()) {
+            // Respond to a click on the "Insert dummy data" menu option
+            case R.id.action_insert_dummy_data:
+                insertPet();
+                mProductCursorAdapter.notifyDataSetChanged();
+
+
+                return true;
+            // Respond to a click on the "Delete all entries" menu option
+            case R.id.action_delete_all_entries:
+                // Do nothing for now
+                deletePets();
+                mProductCursorAdapter.notifyDataSetChanged();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onDestroy() {
@@ -68,7 +99,7 @@ public class InventoryApp extends AppCompatActivity {
 
         ContentValues dummyProductToInsert = new ContentValues();
 
-        dummyProductToInsert.put(InventoryContract.InventoryEntry.NAME, "Garfield");
+        dummyProductToInsert.put(InventoryContract.InventoryEntry.NAME, "Cosito");
         dummyProductToInsert.put(InventoryContract.InventoryEntry.PICTURE, "image.jpg");
         dummyProductToInsert.put(InventoryContract.InventoryEntry.QTY, 3);
         dummyProductToInsert.put(InventoryContract.InventoryEntry.PRICE, "$ 4");
@@ -83,6 +114,28 @@ public class InventoryApp extends AppCompatActivity {
             Log.e(LOG_TAG, "Failed to insert row for db");
 
         }
+        database.close();
+
+    }
+
+    private void deletePets() {
+
+        SQLiteDatabase database = mInventoryDBHelper.getWritableDatabase();
+
+
+
+
+        int id=database.delete(InventoryContract.InventoryEntry.TABLE_NAME,
+                        "1" ,
+                        null);
+
+        if (id == -1) {
+            Log.e(LOG_TAG, "Rows affected:"+id);
+
+        }
+        Toast.makeText(this,id +" rows deleted", Toast.LENGTH_LONG).show();
+
+
         database.close();
 
     }
