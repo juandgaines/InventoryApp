@@ -19,7 +19,7 @@ import com.mytechideas.inventoryapp.data.InventoryContract;
 public class ProductCursorAdapter extends CursorAdapter{
     public static final String LOG_TAG = ProductCursorAdapter.class.getSimpleName();
     public ProductCursorAdapter(Context context, Cursor c) {
-        super(context, c);
+        super(context, c,0);
     }
 
     @Override

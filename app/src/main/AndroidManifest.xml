@@ -35,7 +35,7 @@
 
         <provider
             android:name=".data.InventoryProvider"
-            android:authorities="com.example.android.inventoryapp"
+            android:authorities="com.mytechideas.inventoryapp"
             android:exported="false" />
 
     </application>

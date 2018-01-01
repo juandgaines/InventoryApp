@@ -19,4 +19,10 @@
 
     <!-- Label for dropdown menu option if the pet is male [CHAR LIMIT=20] -->
     <string name="currency_usa"> USD </string>
+
+
+    <string name="action_save">Save</string>
+
+    <!-- Label for editor overflow menu option that deletes the current pet [CHAR LIMIT=20] -->
+    <string name="action_delete">Delete</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.mytechideas.inventoryapp;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,7 @@ public class InventoryApp extends AppCompatActivity {
     public static final String LOG_TAG = InventoryApp.class.getSimpleName();
     private ProductCursorAdapter mProductCursorAdapter;
     private InventoryDbHelper mInventoryDBHelper;
+    private Cursor todoCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,7 @@ public class InventoryApp extends AppCompatActivity {
 
         SQLiteDatabase db =mInventoryDBHelper.getReadableDatabase();
 
-        Cursor todoCursor= db.rawQuery("SELECT * FROM  "+ InventoryContract.InventoryEntry.TABLE_NAME,null);
+        todoCursor= db.rawQuery("SELECT * FROM  "+ InventoryContract.InventoryEntry.TABLE_NAME,null);
 
 
 
@@ -71,31 +74,25 @@ public class InventoryApp extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
-                insertPet();
-                mProductCursorAdapter.notifyDataSetChanged();
+                insertProduct();
+
 
 
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
                 // Do nothing for now
-                deletePets();
-                mProductCursorAdapter.notifyDataSetChanged();
+                deleteAllProducts();
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
 
-        mInventoryDBHelper.close();
-    }
+    private void insertProduct() {
 
-    private void insertPet() {
 
-        SQLiteDatabase database = mInventoryDBHelper.getWritableDatabase();
 
         ContentValues dummyProductToInsert = new ContentValues();
 
@@ -107,36 +104,26 @@ public class InventoryApp extends AppCompatActivity {
         dummyProductToInsert.put(InventoryContract.InventoryEntry.CURRENCY, InventoryContract.InventoryEntry.CURRENCY_USD);
 
 
-        long id=database.insert(InventoryContract.InventoryEntry.TABLE_NAME,null,dummyProductToInsert);
+        Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI, dummyProductToInsert);
+        Log.v(LOG_TAG, "Uri received:"+newUri.toString());
+        int StateOfInsert =Integer.parseInt(String.valueOf(ContentUris.parseId(newUri)));
 
-
-        if (id == -1) {
-            Log.e(LOG_TAG, "Failed to insert row for db");
-
+        if (StateOfInsert < 0) {
+            Toast.makeText(this, "Data Base Insert Error", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Data inserted status ok. Item: #" + StateOfInsert, Toast.LENGTH_SHORT).show();
         }
-        database.close();
 
     }
 
-    private void deletePets() {
+    private void deleteAllProducts() {
 
-        SQLiteDatabase database = mInventoryDBHelper.getWritableDatabase();
+        int StateOfDelete =getContentResolver().delete(InventoryContract.InventoryEntry.CONTENT_URI,null,null);
 
-
-
-
-        int id=database.delete(InventoryContract.InventoryEntry.TABLE_NAME,
-                        "1" ,
-                        null);
-
-        if (id == -1) {
-            Log.e(LOG_TAG, "Rows affected:"+id);
-
+        if (StateOfDelete == 0) {
+            Toast.makeText(this, "Data Base is empty already", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Items deleted:" +StateOfDelete, Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(this,id +" rows deleted", Toast.LENGTH_LONG).show();
-
-
-        database.close();
-
     }
 }
