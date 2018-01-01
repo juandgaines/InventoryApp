@@ -8,7 +8,13 @@
 
     <string name="hint_product_name">Name</string>
     <string name="hint_product_qty">Qty</string>
+    <string name="hint_product_price">3000</string>
+    <string name="hint_product_supplier">El pescador</string>
+    <string name="currency_symbol_cop">$</string>
+    <string name="currency_symbol_usd">$</string>
     <string name="category_price">Price</string>
+    <string name="category_currency">Currrency</string>
+    <string name="category_supplier">Supplier</string>
 
     <string name="action_insert_dummy_data">Insert Dummy Data</string>
 

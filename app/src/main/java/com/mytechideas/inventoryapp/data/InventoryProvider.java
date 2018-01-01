@@ -140,21 +140,28 @@ public class InventoryProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         SQLiteDatabase database = mInventoryDBHelper.getWritableDatabase();
-
+        int rowsDeleted;
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case PRODUCTS:
                 // Delete all rows that match the selection and selection args
                 selection="1";
-                return database.delete(InventoryContract.InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted=database.delete(InventoryContract.InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case PRODUCTS_ID:
                 // Delete a single row given by the ID in the URI
                 selection = InventoryContract.InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return database.delete(InventoryContract.InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted=database.delete(InventoryContract.InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
+
         }
+        if (rowsDeleted != 0)
+            getContext().getContentResolver().notifyChange(uri, null);
+
+        return rowsDeleted;
     }
 
     @Override

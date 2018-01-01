@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
@@ -9,10 +8,8 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<!-- Layout for the editor -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+--><!-- Layout for the editor -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,39 +25,58 @@
 
         <!-- Label -->
         <TextView
-            android:text="@string/editor_overview"
-            style="@style/EditorStyle" />
+            style="@style/EditorStyle"
+            android:text="@string/editor_overview" />
 
         <!-- Input fields -->
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:paddingLeft="4dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="4dp">
 
             <!-- Name field -->
             <EditText
                 android:id="@+id/edit_product_name"
+                style="@style/EditorFieldStyle"
                 android:hint="@string/hint_product_name"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
+                android:inputType="textCapWords" />
 
             <!-- Breed field -->
             <EditText
                 android:id="@+id/edit_product_qty"
+                style="@style/EditorFieldStyle"
                 android:hint="@string/hint_product_qty"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
+                android:inputType="textCapWords" />
         </LinearLayout>
-        <ImageView
-            android:id="@+id/image_button"
-            android:clickable="true"
-            android:src="@drawable/ic_add_a_photo_white_48dp"
-            android:layout_height="wrap_content"
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:background="@color/colorAccent"
-            android:layout_margin="@dimen/activity_margin"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_button"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:layout_margin="@dimen/activity_margin"
+                android:background="@color/colorAccent"
+                android:clickable="true"
+                android:src="@drawable/ic_add_a_photo_white_48dp" />
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <!-- Gender category -->
@@ -72,21 +88,23 @@
 
         <!-- Label -->
         <TextView
-            android:text="@string/category_price"
-            style="@style/CategoryStyle" />
+            style="@style/CategoryStyle"
+            android:text="@string/category_currency" />
 
         <!-- Input field -->
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:orientation="vertical">
+
             <Spinner
                 android:id="@+id/spinner_currency"
-                android:layout_height="48dp"
                 android:layout_width="wrap_content"
+                android:layout_height="48dp"
                 android:paddingRight="16dp"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown" />
+
 
         </LinearLayout>
     </LinearLayout>
@@ -100,28 +118,60 @@
 
         <!-- Label -->
         <TextView
-            android:text="modificar..."
-            style="@style/CategoryStyle" />
-
+            style="@style/CategoryStyle"
+            android:text="@string/category_price" />
+        <TextView
+            android:id="@+id/label_money"
+            style="@style/EditorUnitsStyle"
+            android:text="@string/currency_symbol_cop" />
         <!-- Input fields -->
         <RelativeLayout
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:paddingLeft="4dp">
 
             <!-- Weight field -->
             <EditText
-                android:id="@+id/edit_pet_weight"
-                android:hint="modificar..."
-                android:inputType="number"
-                style="@style/EditorFieldStyle" />
+                android:id="@+id/edit_product_price"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/hint_product_price"
+                android:inputType="number" />
 
             <!-- Units for weight (kg) -->
             <TextView
-                android:id="@+id/label_weight_units"
-                android:text="modificar..."
-                style="@style/EditorUnitsStyle"/>
+                android:id="@+id/label_currency_units"
+                style="@style/EditorUnitsStyle"
+                android:text="@string/currency_colombia" />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/container_supplier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/category_supplier" />
+
+        <!-- Input fields -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:paddingLeft="4dp">
+
+            <!-- Weight field -->
+            <EditText
+                android:id="@+id/edit_supplier"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/hint_product_supplier"
+                android:inputType="text" />
+
+            <!-- Units for weight (kg) -->
+
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

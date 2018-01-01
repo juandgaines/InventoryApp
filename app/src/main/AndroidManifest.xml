@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".InventoryApp">
+        <activity android:name=".InventoryApp"
+            android:theme="@style/EditorTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +32,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".InventoryApp" />
         </activity>
-        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".DetailActivity"
+            android:theme="@style/EditorTheme">
+
+
+        </activity>
 
         <provider
             android:name=".data.InventoryProvider"

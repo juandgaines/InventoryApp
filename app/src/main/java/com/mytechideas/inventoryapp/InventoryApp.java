@@ -1,10 +1,12 @@
 package com.mytechideas.inventoryapp;
 
+import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,24 +21,17 @@ import android.widget.Toast;
 import com.mytechideas.inventoryapp.data.InventoryContract;
 import com.mytechideas.inventoryapp.data.InventoryDbHelper;
 
-public class InventoryApp extends AppCompatActivity {
+public class InventoryApp extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     public static final String LOG_TAG = InventoryApp.class.getSimpleName();
     private ProductCursorAdapter mProductCursorAdapter;
     private InventoryDbHelper mInventoryDBHelper;
-    private Cursor todoCursor;
+
+    private static final int PRODUCTS_LOADER=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inventory_app);
-        mInventoryDBHelper=new InventoryDbHelper(this);
-
-
-
-        SQLiteDatabase db =mInventoryDBHelper.getReadableDatabase();
-
-        todoCursor= db.rawQuery("SELECT * FROM  "+ InventoryContract.InventoryEntry.TABLE_NAME,null);
-
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -54,9 +49,9 @@ public class InventoryApp extends AppCompatActivity {
         View emptyView=findViewById(R.id.empty_view);
         productsListView.setEmptyView(emptyView);
 
-        mProductCursorAdapter= new ProductCursorAdapter(this,todoCursor);
+        mProductCursorAdapter= new ProductCursorAdapter(this,null);
         productsListView.setAdapter(mProductCursorAdapter);
-
+        getLoaderManager().initLoader(PRODUCTS_LOADER, null, this);
 
     }
     @Override
@@ -125,5 +120,30 @@ public class InventoryApp extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Items deleted:" +StateOfDelete, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        String[] projection= {
+                InventoryContract.InventoryEntry._ID,
+                InventoryContract.InventoryEntry.NAME,
+                InventoryContract.InventoryEntry.QTY
+        };
+        return new CursorLoader(this,
+                InventoryContract.InventoryEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mProductCursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mProductCursorAdapter.swapCursor(null);
     }
 }
