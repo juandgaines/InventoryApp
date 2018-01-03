@@ -15,16 +15,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.mytechideas.inventoryapp.data.InventoryContract;
-import com.mytechideas.inventoryapp.data.InventoryDbHelper;
 
 public class InventoryApp extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     public static final String LOG_TAG = InventoryApp.class.getSimpleName();
     private ProductCursorAdapter mProductCursorAdapter;
-    private InventoryDbHelper mInventoryDBHelper;
+
 
     private static final int PRODUCTS_LOADER=0;
 
@@ -51,7 +51,23 @@ public class InventoryApp extends AppCompatActivity implements LoaderManager.Loa
 
         mProductCursorAdapter= new ProductCursorAdapter(this,null);
         productsListView.setAdapter(mProductCursorAdapter);
+
+        productsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+
+                Toast.makeText(getApplicationContext(), "Funciona!!", Toast.LENGTH_SHORT).show();
+                Intent intent   =new Intent(InventoryApp.this,InsertActivity.class);
+
+                Uri uri= ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI,id);
+                intent.setData(uri);
+
+                startActivity(intent);
+            }
+        });
         getLoaderManager().initLoader(PRODUCTS_LOADER, null, this);
+
 
     }
     @Override
@@ -91,12 +107,13 @@ public class InventoryApp extends AppCompatActivity implements LoaderManager.Loa
 
         ContentValues dummyProductToInsert = new ContentValues();
 
+        dummyProductToInsert.put(InventoryContract.InventoryEntry.PRICE, "7");
         dummyProductToInsert.put(InventoryContract.InventoryEntry.NAME, "Cosito");
         dummyProductToInsert.put(InventoryContract.InventoryEntry.PICTURE, "image.jpg");
         dummyProductToInsert.put(InventoryContract.InventoryEntry.QTY, 3);
-        dummyProductToInsert.put(InventoryContract.InventoryEntry.PRICE, "$ 4");
+
         dummyProductToInsert.put(InventoryContract.InventoryEntry.SUPPLIER, "EL PESCADOR");
-        dummyProductToInsert.put(InventoryContract.InventoryEntry.CURRENCY, InventoryContract.InventoryEntry.CURRENCY_USD);
+        dummyProductToInsert.put(InventoryContract.InventoryEntry.CURRENCY, InventoryContract.InventoryEntry.CURRECNCY_COP);
 
 
         Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI, dummyProductToInsert);
@@ -127,7 +144,9 @@ public class InventoryApp extends AppCompatActivity implements LoaderManager.Loa
         String[] projection= {
                 InventoryContract.InventoryEntry._ID,
                 InventoryContract.InventoryEntry.NAME,
-                InventoryContract.InventoryEntry.QTY
+                InventoryContract.InventoryEntry.QTY,
+                InventoryContract.InventoryEntry.PRICE,
+                InventoryContract.InventoryEntry.CURRENCY
         };
         return new CursorLoader(this,
                 InventoryContract.InventoryEntry.CONTENT_URI,

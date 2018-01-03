@@ -39,9 +39,9 @@ public class InventoryContract {
         public static final String CURRENCY="product_currency";
         public static final String SUPPLIER="product_supplier";
 
-        public static final int UNKNOW= 0;
-        public static final int CURRECNCY_COP= 1;
-        public static final int CURRENCY_USD= 2;
+        //public static final int UNKNOW= 0;
+        public static final int CURRECNCY_COP= 0;
+        public static final int CURRENCY_USD= 1;
 
 
         public static final Uri CONTENT_URI=Uri.withAppendedPath(BASE_CONTENT_URI,PATH_INVENTORY);

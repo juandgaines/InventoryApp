@@ -6,10 +6,10 @@
     <string name="empty_view_subtitle_text">Get started by adding a new product</string>
     <string name="editor_overview">Overview</string>
 
-    <string name="hint_product_name">Name</string>
-    <string name="hint_product_qty">Qty</string>
-    <string name="hint_product_price">3000</string>
-    <string name="hint_product_supplier">El pescador</string>
+    <string name="hint_product_name">Enter Name...</string>
+    <string name="hint_product_qty">Enter Qty...</string>
+    <string name="hint_product_price">Enter price...</string>
+    <string name="hint_product_supplier">Enter supplier...</string>
     <string name="currency_symbol_cop">$</string>
     <string name="currency_symbol_usd">$</string>
     <string name="category_price">Price</string>
@@ -17,7 +17,9 @@
     <string name="category_supplier">Supplier</string>
 
     <string name="action_insert_dummy_data">Insert Dummy Data</string>
+    <string name="editor_activity_title_new_product">Add a Product</string>
 
+    <string name="editor_activity_title_edit_product">Edit Product</string>
     <!-- Label for overflow menu option that deletes all pet data in the app [CHAR LIMIT=20] -->
     <string name="action_delete_all_entries">Delete All Products</string>
 
@@ -31,4 +33,32 @@
 
     <!-- Label for editor overflow menu option that deletes the current pet [CHAR LIMIT=20] -->
     <string name="action_delete">Delete</string>
+
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+
+    <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
+    <string name="discard">Discard</string>
+
+    <!-- Dialog button text for the option to keep editing the current pet [CHAR LIMIT=20] -->
+    <string name="keep_editing">Keep Editing</string>
+
+    <string name="editor_delete_product_successful">Product deleted</string>
+
+    <!-- Toast message in editor when current pet has failed to be deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_product_failed">Error with deleting product</string>
+
+    <!-- Dialog message to ask the user to confirm deleting the current pet [CHAR LIMIT=NONE] -->
+    <string name="delete_dialog_msg">Delete this product?</string>
+
+    <!-- Dialog button text for the option to confirm deleting the current pet [CHAR LIMIT=20] -->
+    <string name="delete">Delete</string>
+
+    <!-- Dialog button text for the option to cancel deletion of the current pet [CHAR LIMIT=20] -->
+    <string name="cancel">Cancel</string>
+    <string name="editor_insert_product_successful">Product saved</string>
+
+    <!-- Toast message in editor when new pet has failed to be inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_product_failed">Error with saving product</string>
+    <string name="editor_update_product_failed">Error during updating</string>
+    <string name="editor_update_product_successful">Product updating successful!</string>
 </resources>
