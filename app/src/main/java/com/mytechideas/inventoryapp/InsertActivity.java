@@ -8,6 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,11 +30,14 @@ import android.widget.Toast;
 
 import com.mytechideas.inventoryapp.data.InventoryContract;
 
+import java.io.ByteArrayOutputStream;
+
 public class InsertActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int PRODUCTS_LOADER_ID=1;
     private boolean mProductHasChanged = false;
     private ImageView mPhotoButton;
+    private ImageView mImageView;
     private Spinner mCurrencySpinner;
     private TextView mCurrencyForText;
     private TextView mNameProduct;
@@ -78,6 +84,7 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
         mPrice=(TextView)findViewById(R.id.edit_product_price);
         mQty=(TextView)findViewById(R.id.edit_product_qty);
         mCurrencyForText=(TextView)findViewById(R.id.label_currency_units);
+        mImageView=(ImageView)findViewById(R.id.product_cap);
 
         mPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,6 +208,7 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
         String supplierString = mSupplierName.getText().toString().trim();
         String priceString = mPrice.getText().toString().trim();
         String qtyString = mQty.getText().toString().trim();
+        Bitmap image= ((BitmapDrawable)mImageView.getDrawable()).getBitmap();
 
         // Check if this is supposed to be a new pet
         // and check if all the fields in the editor are blank
@@ -220,7 +228,7 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
         values.put(InventoryContract.InventoryEntry.PRICE,priceString);
 
         values.put(InventoryContract.InventoryEntry.CURRENCY, mCurrency);
-        values.put(InventoryContract.InventoryEntry.PICTURE, "foto123.jpg");
+        //values.put(InventoryContract.InventoryEntry.PICTURE, "foto123.jpg");
         // If the weight is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.
         int qty = 0;
@@ -228,6 +236,24 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
             qty = Integer.parseInt(qtyString);
         }
         values.put(InventoryContract.InventoryEntry.QTY, qtyString);
+
+        if(image!=null){
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            byte[] bArray = bos.toByteArray();
+
+            values.put(InventoryContract.InventoryEntry.PICTURE, bArray);
+        }
+        else{
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            mImageView.setImageResource(R.drawable.nophoto);
+            image= ((BitmapDrawable)mImageView.getDrawable()).getBitmap();
+            image.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            byte[] bArray = bos.toByteArray();
+            values.put(InventoryContract.InventoryEntry.PICTURE, bArray);
+
+        }
+
 
         // Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not
         if (mProductUri == null) {
@@ -361,21 +387,27 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        String[] projection = {
-                InventoryContract.InventoryEntry._ID,
-                InventoryContract.InventoryEntry.NAME,
-                InventoryContract.InventoryEntry.PRICE,
-                InventoryContract.InventoryEntry.QTY,
-                InventoryContract.InventoryEntry.SUPPLIER,
-                InventoryContract.InventoryEntry.PICTURE,
-                InventoryContract.InventoryEntry.CURRENCY};
 
-        return new CursorLoader(this,   // Parent activity context
-                mProductUri,         // Query the content URI for the current pet
-                projection,             // Columns to include in the resulting Cursor
-                null,                   // No selection clause
-                null,                   // No selection arguments
-                null);
+        if (mProductUri != null) {
+            String[] projection = {
+                    InventoryContract.InventoryEntry._ID,
+                    InventoryContract.InventoryEntry.NAME,
+                    InventoryContract.InventoryEntry.PRICE,
+                    InventoryContract.InventoryEntry.QTY,
+                    InventoryContract.InventoryEntry.SUPPLIER,
+                    InventoryContract.InventoryEntry.PICTURE,
+                    InventoryContract.InventoryEntry.CURRENCY};
+
+            return new CursorLoader(this,   // Parent activity context
+                    mProductUri,         // Query the content URI for the current pet
+                    projection,             // Columns to include in the resulting Cursor
+                    null,                   // No selection clause
+                    null,                   // No selection arguments
+                    null);
+        }
+        else {
+            return null;
+        }
     }
 
     @Override
@@ -397,13 +429,14 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
             int qty = cursor.getInt(qtyColumnIndex);
             String supplier = cursor.getString(supplierColumnIndex);
             int currency = cursor.getInt(currencyColumnIndex);
-            String picture = cursor.getString(pictureColumnIndex);
-
+            byte[] picture = cursor.getBlob(pictureColumnIndex);
+            Bitmap bm = BitmapFactory.decodeByteArray(picture, 0 ,picture.length);
             // Update the views on the screen with the values from the database
             mNameProduct.setText(name);
             mSupplierName.setText(supplier);
             mQty.setText(Integer.toString(qty));
             mPrice.setText(price);
+            mImageView.setImageBitmap(bm);
             ///mPhotoButton set immage
 
 
@@ -422,5 +455,15 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mImageView.setImageBitmap(imageBitmap);
+
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.mytechideas.inventoryapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,16 +39,16 @@ public class ProductCursorAdapter extends CursorAdapter{
         TextView price= (TextView) view.findViewById(R.id.price);
 
         ImageView pic= (ImageView) view.findViewById(R.id.product_image);
+        ImageView button=(ImageView) view.findViewById(R.id.buy_button);
+        //pic.setImageResource(R.drawable.ic_launcher_foreground);
 
-        pic.setImageResource(R.drawable.ic_launcher_foreground);
-
-        pic.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(view.getContext(), "Compraaaaa!!", Toast.LENGTH_SHORT).show();
             }
         });
-        pic.setClickable(true);
+        button.setClickable(true);
 
 
 
@@ -54,6 +56,10 @@ public class ProductCursorAdapter extends CursorAdapter{
         String priceString=cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.PRICE));
         String qtyString=Integer.toString(cursor.getInt(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.QTY)));
         int currencyInteger=cursor.getInt(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.CURRENCY));
+
+        byte[] image =cursor.getBlob(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.PICTURE));
+        Bitmap bm = BitmapFactory.decodeByteArray(image, 0 ,image.length);
+
         String currencyMessage;
         if (currencyInteger== InventoryContract.InventoryEntry.CURRECNCY_COP){
             currencyMessage= context.getResources().getString((R.string.currency_colombia));
@@ -66,7 +72,7 @@ public class ProductCursorAdapter extends CursorAdapter{
         //Log.v(LOG_TAG,"qty DB: "+ qtyString);
         name.setText(nameString);
         qty.setText(qtyString+ " pcs available");
-
+        pic.setImageBitmap(bm);
         price.setText(priceString+ " "+currencyMessage);
 
     }

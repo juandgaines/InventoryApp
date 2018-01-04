@@ -7,6 +7,8 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +22,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.mytechideas.inventoryapp.data.InventoryContract;
+
+import java.io.ByteArrayOutputStream;
 
 public class InventoryApp extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     public static final String LOG_TAG = InventoryApp.class.getSimpleName();
@@ -109,6 +113,14 @@ public class InventoryApp extends AppCompatActivity implements LoaderManager.Loa
 
         dummyProductToInsert.put(InventoryContract.InventoryEntry.PRICE, "7");
         dummyProductToInsert.put(InventoryContract.InventoryEntry.NAME, "Cosito");
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        Bitmap image= ((BitmapDrawable)getResources().getDrawable(R.drawable.nophoto)).getBitmap();
+        image.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        byte[] bArray = bos.toByteArray();
+        dummyProductToInsert.put(InventoryContract.InventoryEntry.PICTURE, bArray);
+
         dummyProductToInsert.put(InventoryContract.InventoryEntry.PICTURE, "image.jpg");
         dummyProductToInsert.put(InventoryContract.InventoryEntry.QTY, 3);
 
@@ -141,12 +153,15 @@ public class InventoryApp extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+
+
         String[] projection= {
                 InventoryContract.InventoryEntry._ID,
                 InventoryContract.InventoryEntry.NAME,
                 InventoryContract.InventoryEntry.QTY,
                 InventoryContract.InventoryEntry.PRICE,
-                InventoryContract.InventoryEntry.CURRENCY
+                InventoryContract.InventoryEntry.CURRENCY,
+                InventoryContract.InventoryEntry.PICTURE
         };
         return new CursorLoader(this,
                 InventoryContract.InventoryEntry.CONTENT_URI,

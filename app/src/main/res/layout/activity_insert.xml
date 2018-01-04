@@ -66,13 +66,7 @@
                 android:clickable="true"
                 android:src="@drawable/ic_add_a_photo_white_48dp" />
 
-            <Switch
-                android:id="@+id/switch1"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center_horizontal"
-                />
+
 
         </LinearLayout>
 
@@ -173,5 +167,12 @@
             <!-- Units for weight (kg) -->
 
         </RelativeLayout>
+
     </LinearLayout>
+    <ImageView
+        android:id="@+id/product_cap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"/>
+
 </LinearLayout>

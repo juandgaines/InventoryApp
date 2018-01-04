@@ -23,7 +23,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
         String SQL_CREATE_PETS_TABLE ="CREATE TABLE " + InventoryContract.InventoryEntry.TABLE_NAME+ "("
                 + InventoryContract.InventoryEntry._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                +InventoryContract.InventoryEntry.PICTURE + " TEXT NOT NULL, "
+                +InventoryContract.InventoryEntry.PICTURE + " BLOB NOT NULL, "
                 +InventoryContract.InventoryEntry.NAME + " TEXT, "
                 +InventoryContract.InventoryEntry.PRICE + " TEXT, "
                 +InventoryContract.InventoryEntry.SUPPLIER + " TEXT, "
