@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -116,9 +116,12 @@ public class InventoryApp extends AppCompatActivity implements LoaderManager.Loa
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-        Bitmap image= ((BitmapDrawable)getResources().getDrawable(R.drawable.nophoto)).getBitmap();
+        Bitmap image = BitmapFactory.decodeResource(getResources(),
+                R.drawable.nophoto);
         image.compress(Bitmap.CompressFormat.PNG, 100, bos);
         byte[] bArray = bos.toByteArray();
+
+
         dummyProductToInsert.put(InventoryContract.InventoryEntry.PICTURE, bArray);
 
         dummyProductToInsert.put(InventoryContract.InventoryEntry.PICTURE, "image.jpg");
@@ -161,7 +164,7 @@ public class InventoryApp extends AppCompatActivity implements LoaderManager.Loa
                 InventoryContract.InventoryEntry.QTY,
                 InventoryContract.InventoryEntry.PRICE,
                 InventoryContract.InventoryEntry.CURRENCY,
-                InventoryContract.InventoryEntry.PICTURE
+                InventoryContract.InventoryEntry.PICTURE,
         };
         return new CursorLoader(this,
                 InventoryContract.InventoryEntry.CONTENT_URI,

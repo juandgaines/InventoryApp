@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -208,7 +209,8 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
         String supplierString = mSupplierName.getText().toString().trim();
         String priceString = mPrice.getText().toString().trim();
         String qtyString = mQty.getText().toString().trim();
-        Bitmap image= ((BitmapDrawable)mImageView.getDrawable()).getBitmap();
+        Drawable image= mImageView.getDrawable();
+
 
         // Check if this is supposed to be a new pet
         // and check if all the fields in the editor are blank
@@ -238,17 +240,20 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
         values.put(InventoryContract.InventoryEntry.QTY, qtyString);
 
         if(image!=null){
+            Bitmap image2=((BitmapDrawable)image).getBitmap();
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            image2.compress(Bitmap.CompressFormat.PNG, 100, bos);
             byte[] bArray = bos.toByteArray();
 
             values.put(InventoryContract.InventoryEntry.PICTURE, bArray);
         }
         else{
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            mImageView.setImageResource(R.drawable.nophoto);
-            image= ((BitmapDrawable)mImageView.getDrawable()).getBitmap();
-            image.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            Bitmap image2 = BitmapFactory.decodeResource(getResources(),
+                    R.drawable.nophoto);
+            mImageView.setImageBitmap(image2);
+
+            image2.compress(Bitmap.CompressFormat.PNG, 100, bos);
             byte[] bArray = bos.toByteArray();
             values.put(InventoryContract.InventoryEntry.PICTURE, bArray);
 
