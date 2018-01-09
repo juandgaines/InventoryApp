@@ -60,8 +60,7 @@ public class InventoryApp extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-
-                Toast.makeText(getApplicationContext(), "Funciona!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Item ID:"+id, Toast.LENGTH_SHORT).show();
                 Intent intent   =new Intent(InventoryApp.this,InsertActivity.class);
 
                 Uri uri= ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI,id);
@@ -124,7 +123,7 @@ public class InventoryApp extends AppCompatActivity implements LoaderManager.Loa
 
         dummyProductToInsert.put(InventoryContract.InventoryEntry.PICTURE, bArray);
 
-        dummyProductToInsert.put(InventoryContract.InventoryEntry.PICTURE, "image.jpg");
+
         dummyProductToInsert.put(InventoryContract.InventoryEntry.QTY, 3);
 
         dummyProductToInsert.put(InventoryContract.InventoryEntry.SUPPLIER, "EL PESCADOR");
@@ -165,6 +164,7 @@ public class InventoryApp extends AppCompatActivity implements LoaderManager.Loa
                 InventoryContract.InventoryEntry.PRICE,
                 InventoryContract.InventoryEntry.CURRENCY,
                 InventoryContract.InventoryEntry.PICTURE,
+                InventoryContract.InventoryEntry.SUPPLIER
         };
         return new CursorLoader(this,
                 InventoryContract.InventoryEntry.CONTENT_URI,
