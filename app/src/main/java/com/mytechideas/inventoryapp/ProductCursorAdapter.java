@@ -42,29 +42,7 @@ public class ProductCursorAdapter extends CursorAdapter{
         TextView price= (TextView) view.findViewById(R.id.price);
         ImageView pic= (ImageView) view.findViewById(R.id.product_image);
         final ImageView button=(ImageView) view.findViewById(R.id.buy_button);
-        //pic.setImageResource(R.drawable.ic_launcher_foreground);
 
-
-
-        /*String supplierSchema= cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.SUPPLIER)).replaceAll("\\s", "").toLowerCase();
-        //Toast.makeText(context,supplierSchema,Toast.LENGTH_LONG).show();
-        final String[] supplierEmail={supplierSchema+"@"+supplierSchema+".com"};
-                *//*{(cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.SUPPLIER)).replaceAll("\\s", ""))+
-                "@"+(cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.SUPPLIER)).replaceAll("\\s", ""))+".com"};
-                *//*
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:"));
-                intent.putExtra(Intent.EXTRA_EMAIL, supplierEmail);
-                intent.putExtra(Intent.EXTRA_SUBJECT, "New order:");
-                if (intent.resolveActivity(context.getPackageManager()) != null) {
-                    context.startActivity(intent);
-                }
-            }
-        });
-        button.setClickable(true);*/
 
         String nameString=cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.NAME));
         String priceString=cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.PRICE));

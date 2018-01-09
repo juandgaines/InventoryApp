@@ -24,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,6 +46,9 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
     private TextView mSupplierName;
     private TextView mPrice;
     private TextView mQty;
+    private Button mOrderButton;
+    private Button mReduceButton;
+    private Button mIncrementButton;
     private int mCurrency = 0;
     private Uri mProductUri;
 
@@ -86,6 +90,9 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
         mQty=(TextView)findViewById(R.id.edit_product_qty);
         mCurrencyForText=(TextView)findViewById(R.id.label_currency_units);
         mImageView=(ImageView)findViewById(R.id.product_cap);
+        mOrderButton= (Button)findViewById(R.id.order_supplier_button);
+        mIncrementButton= (Button)findViewById(R.id.add_button);
+        mReduceButton= (Button)findViewById(R.id.substract_button);
 
         mPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,12 +104,21 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
+
+
+
+
+
+
         mNameProduct.setOnTouchListener(mTouchListener);
         mSupplierName.setOnTouchListener(mTouchListener);
         mQty.setOnTouchListener(mTouchListener);
         mCurrencySpinner.setOnTouchListener(mTouchListener);
         mPrice.setOnTouchListener(mTouchListener);
         mPhotoButton.setOnTouchListener(mTouchListener);
+        mReduceButton.setOnTouchListener(mTouchListener);
+        mIncrementButton.setOnTouchListener(mTouchListener);
+
 
 
         setupSpinner();
@@ -420,7 +436,11 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
         if (cursor == null || cursor.getCount() < 1) {
             return;
         }
+
         if (cursor.moveToFirst()) {
+
+            int idColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry._ID);
+
             int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.NAME);
             int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.PRICE);
             int qtyColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.QTY);
@@ -431,7 +451,37 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
             String price = cursor.getString(priceColumnIndex);
-            int qty = cursor.getInt(qtyColumnIndex);
+            final int idValue=cursor.getInt(idColumnIndex);
+            final int[] qty = {cursor.getInt(qtyColumnIndex)};
+
+            mReduceButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(qty[0]>0) {
+                        qty[0]--;
+                        mQty.setText(Integer.toString(qty[0]));
+
+                    }else{
+                        Toast.makeText(getApplicationContext(),"No products available. Refill stock from your supplier.", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+            mIncrementButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(qty[0]<1000) {
+                        qty[0]++;
+                        mQty.setText(Integer.toString(qty[0]));
+
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Top quantity achived.", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+
             String supplier = cursor.getString(supplierColumnIndex);
             int currency = cursor.getInt(currencyColumnIndex);
             byte[] picture = cursor.getBlob(pictureColumnIndex);
@@ -439,12 +489,28 @@ public class InsertActivity extends AppCompatActivity implements LoaderManager.L
             // Update the views on the screen with the values from the database
             mNameProduct.setText(name);
             mSupplierName.setText(supplier);
-            mQty.setText(Integer.toString(qty));
+            mQty.setText(Integer.toString(qty[0]));
             mPrice.setText(price);
             mImageView.setImageBitmap(bm);
             ///mPhotoButton set immage
 
+            String supplierSchema= cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.SUPPLIER)).replaceAll("\\s", "").toLowerCase();
+            //Toast.makeText(context,supplierSchema,Toast.LENGTH_LONG).show();
+            final String[] supplierEmail={supplierSchema+"@"+supplierSchema+".com"};
 
+
+            mOrderButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent=new Intent(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.parse("mailto:"));
+                    intent.putExtra(Intent.EXTRA_EMAIL, supplierEmail);
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "New order:");
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                       startActivity(intent);
+                    }
+                }
+            });
             switch (currency) {
                 case InventoryContract.InventoryEntry.CURRECNCY_COP:
                     mCurrencySpinner.setSelection(0);
